@@ -1,0 +1,44 @@
+---
+
+- hosts: all
+  become: true
+  pre_tasks:
+
+  - name: Install Updates (CentOS)
+    tags: always
+    dnf:
+      update_cache: yes
+    changed_when: False
+    when: ansible_distribution == "CentOS"
+
+  - name: Install Updates (Ubuntu)
+    tags: always
+    apt:
+      update_cache: yes
+    changed_when: False
+    when: ansible_distribution == "Ubuntu"
+
+- hosts: ubuntu
+  become: true
+  roles:
+    - nagios
+
+- hosts: all
+  become: true
+  roles:
+    - prometheus
+
+- hosts: all
+  become: true
+  roles:
+    - Lamp_stack
+
+- hosts: all
+  become: true
+  roles:
+    - elastic_stack
+
+- hosts: all
+  become: true
+  roles:
+    - Grafana
